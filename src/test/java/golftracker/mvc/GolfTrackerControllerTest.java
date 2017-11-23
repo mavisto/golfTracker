@@ -1,21 +1,31 @@
 package golftracker.mvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import golftracker.core.entities.Golftracker;
+import golftracker.core.services.GolftrackerService;
+import golftracker.rest.mvc.GolfTrackerController;
+
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.endsWith;
 
 public class GolfTrackerControllerTest {
     
     @InjectMocks 
     private GolfTrackerController controller;
+    
+    @Mock
+    GolftrackerService service;
     
     private MockMvc mockMvc;
     
@@ -29,12 +39,19 @@ public class GolfTrackerControllerTest {
     }
 
     @Test
-    public void test() throws Exception{
-        mockMvc.perform(post("/test")
-                .content("{\"title\":\"Test Blog Title\"}")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andDo(print());
+    public void getGolftrackerEntry()  throws Exception{
+        Golftracker golftracker = new Golftracker();
+        
+        golftracker.setId( 1L );
+        golftracker.setTitle( "Golf Tracker Test" );
+        
+        when(service.find( 1L )).thenReturn(golftracker);
+        
+        mockMvc.perform( get("/rest/golftracker-entries/1") )
+            .andExpect(jsonPath("$.title", is(golftracker.getTitle())))
+            .andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/golftracker-entries/1"))))
+            .andExpect(status().isOk());
+
     }
 
 }

@@ -1,6 +1,8 @@
-package golftracker.entities;
+package golftracker.rest.resources;
 
-public class Golftracker {
+import org.springframework.hateoas.ResourceSupport;
+
+public class GolftrackerResource extends ResourceSupport {
     private String title;
 
     /**
