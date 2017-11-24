@@ -20,7 +20,7 @@ public class GolftrackerResourceAsm extends ResourceAssemblerSupport<Golftracker
         GolftrackerResource res = new GolftrackerResource();
         res.setTitle( golftracker.getTitle() );
         
-        Link link = linkTo( methodOn( GolfTrackerController.class ).getGolftracker( golftracker.getId() ) ).withSelfRel();
+        Link link = linkTo( GolfTrackerController.class ).slash( golftracker.getId() ).withSelfRel();
         
         res.add( link.withSelfRel() );
 
