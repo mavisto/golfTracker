@@ -1,6 +1,9 @@
 package golftracker.rest.resources.asm;
 
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
+import org.springframework.hateoas.Link;
 
 import golftracker.core.entities.Golftracker;
 import golftracker.rest.mvc.GolfTrackerController;
@@ -13,9 +16,13 @@ public class GolftrackerResourceAsm extends ResourceAssemblerSupport<Golftracker
     }
 
     @Override
-    public GolftrackerResource toResource( Golftracker entity ) {
+    public GolftrackerResource toResource( Golftracker golftracker ) {
         GolftrackerResource res = new GolftrackerResource();
-        res.setTitle( entity.getTitle() );
+        res.setTitle( golftracker.getTitle() );
+        
+        Link link = linkTo( methodOn( GolfTrackerController.class ).getGolftracker( golftracker.getId() ) ).withSelfRel();
+        
+        res.add( link.withSelfRel() );
 
         return res;
     }

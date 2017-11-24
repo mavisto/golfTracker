@@ -10,7 +10,7 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="golftracker"></context:component-scan>
+	<context:component-scan base-package="golftracker.mvc"></context:component-scan>
 	<mvc:annotation-driven />
 
 	<bean id="jspViewResolver"
